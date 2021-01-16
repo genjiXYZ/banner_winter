@@ -1,6 +1,8 @@
 # bilibili 冬季 banner
-[https://genjixyz.github.io/banner_winter/](https://genjixyz.github.io/banner_winter/)
+完整demo: [https://genjixyz.github.io/banner_winter/](https://genjixyz.github.io/banner_winter/)
+canvas demo: [https://codepen.io/895939059/pen/abmPLeP](https://codepen.io/895939059/pen/abmPLeP)
 
+ 
 
 #### 之前的'秋季' banner 是通过js控制 transform opacity,
 
