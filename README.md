@@ -11,6 +11,8 @@
 #### 用`vue3`写得 , 主要是为了熟练下 `vue3`  文件夹 `pure` 是用js写得.
 
 
+
+待更新: 当鼠标离开 canvas 后应该 easing 回到原来位置
 小优化:
 
 1. 之前秋季 是控制了全部图片的 `transform` `opacity`
