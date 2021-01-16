@@ -28,7 +28,7 @@
 
 1. 用leave 别用 out 
 
-2. 鼠标离开后,图片缓动复原 官网没有改变`class `也没有动态改变 `tansition` 是用 [Bezier-easing](https://github.com/gre/bezier-easing) js.   (也挺好用 "秋"我是用的这个感觉有点麻烦)
+2. 鼠标离开后,图片缓动复原 官网没有改变`class `也没有动态改变 `tansition` 是用 [Bezier-easing](https://github.com/gre/bezier-easing) js.   ("秋"是用的这个,感觉有点麻烦)
 
    我是用 通过 绑定`class`  离开时候有`transition `,进入时候没有`transition`(我感觉更好用,主要是方便)
 
