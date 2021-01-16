@@ -26,3 +26,6 @@ canvas demo: [https://codepen.io/895939059/pen/abmPLeP](https://codepen.io/89593
 
 
 3. canvas  封装成class  以便大家,和我以后使用.  
+
+
+转载请标注! [https://github.com/genjiXYZ](https://github.com/genjiXYZ)
