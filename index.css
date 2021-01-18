@@ -21,8 +21,9 @@ html{
 .banner{
   width: 100%;
   min-width: 999px;
+ height: 10vw ;
   min-height: 155px;
-  height: 9.375vh;
+  /* height: 9.375vh; */
   position: absolute;
   overflow: hidden;
   --per: 0;
