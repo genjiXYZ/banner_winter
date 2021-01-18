@@ -1,4 +1,4 @@
-
+// https://github.com/genjiXYZ/banner_winter
 var domBanner = document.querySelector(".banner");
 
 var myCanvas = document.querySelector(".snow");

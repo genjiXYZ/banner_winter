@@ -1,4 +1,4 @@
-# banner_winter
+
 
 # bilibili 冬季 banner
 
@@ -6,13 +6,17 @@
 
 ## demo
 
-#### github-page:  [https://genjixyz.github.io/banner_winter/](https://genjixyz.github.io/banner_winter/)
+#### github-page (科学):  [https://genjixyz.github.io/banner_winter/](https://genjixyz.github.io/banner_winter/)
 
 #### codepen: [https://codepen.io/895939059/pen/abmPLeP](https://codepen.io/895939059/pen/abmPLeP)
 
+#### 国内 : [https://genji.xyz/winter/](https://genji.xyz/winter/)
+
 -----
 
-  
+  ### 声明 
+
+图片和视频版权归bilibili所有,本人仅作为学习使用,如有侵权请联系895939059@qq.com 删除!
 
 ### 对比
 
@@ -20,25 +24,21 @@
 
 '冬季'是通过js控制 `css变量` `--per`  transform calc( .... ) 来控制的.
 
-### 小细节
+### 小优化
 
-#### 写 html 时候要注意图片的顺序 
+1. 改变上层的 `transform` `opacity` 这样就少控制两个图片 , 相应dom 顺序要正确,或者你z-index要排好 .
 
-方便opacity 变化  和懒得写z-index
+2. 用mouseleave 不要用 mouseout ,(尽管当大小一致时候没有差别,万一以后上边加点东西呢).
+3. 使用将mousemove 节流时候 (无论计时器 还是 requestAnimationFrame)时候. 一定 在mouseleave 时候取消最后一次节流的操作 ,否自 在mouseleave 设定的值 ,会被 最后一次节流更改.  
+4. canvas 雪花的 各种值(除了opacity) 尽量用整数 或者 保留几位小数.
 
+5. window.blur  window.onfocus  设定 canvas 播放 / 暂停 .
 
+6. 之前 ''秋""  mouseleave 后的动画  是用 [Bezier-easing](https://github.com/gre/bezier-easing) js 来控制的  (当时蠢没想到)
 
-#### 鼠标离开
+   现在改为 leave 后 添加 带有transition 的class  , enter 时候在去掉class  (这么简单的玩意 当时怎么就蒙了呢)
 
-1. 用leave 别用 out 
-
-2. 鼠标离开后,图片缓动复原 官网没有改变`class `也没有动态改变 `tansition` 是用 [Bezier-easing](https://github.com/gre/bezier-easing) js.   (也挺好用 "秋"我是用的这个感觉有点麻烦)
-
-   我是用 通过 绑定`class`  离开时候有`transition `,进入时候没有`transition`(我感觉更好用,主要是方便)
-
-3. `canvas` 离开 时候也要添加个leave方法 将视差的offsetX  还原
-
-   
+7. 
 
 #### canvas
 
@@ -48,7 +48,11 @@
 
 因为是有视差的,所以`近大远小` ,`近快远慢`.
 
-我通过 `雪花` 的`大小`来让它的 `速度` `透明度` 在一定范围内随机:
+我通过 `雪花` 的`大小`,来让它的 `速度` `透明度` 在不同的范围内随机:
+
+并且根据根据大小不同,使鼠标进入后 ,移动的偏移量系数不同.
+
+
 
 ```js
  this.x = this.randBetween(0, window.innerWidth);
@@ -59,17 +63,40 @@ if (this.radius >= 3.5) {
       this.alpha = this.randBetween(0.5, 1);
     } else {
       this.vy = this.randBetween(1, 1.5);
-      this.alpha = this.randBetween(0.5, 1);
+      this.alpha = this.randBetween(0.1, 8);
     }
-///
+///randBetween
  randBetween(min, max) {
     return min + Math.random() * (max - min);
   }
+
+
+//class Snow => update
+ update() {
+    this.ctx.clearRect(0, 0, this.width, this.height);
+    this.snowflakes.forEach((flake) => {
+      flake.update(this.height);
+      this.ctx.save();
+      this.ctx.fillStyle = "#FFF";
+      this.ctx.beginPath();
+
+      if (flake.radius >= 3) {
+        this.ctx.arc(flake.x + per * 200, flake.y, flake.radius, 0, Math.PI * 2)
+      } else {
+        this.ctx.arc(flake.x + per * 80, flake.y, flake.radius, 0, Math.PI * 2);
+      }
+      
+      
+      this.ctx.closePath();
+      this.ctx.globalAlpha = flake.alpha;
+      this.ctx.fill();
+      this.ctx.restore();
+    });
 ```
 
 > 官网canvas(一看就是南方的雪❄️) 我写了两个版本 
 >
-> `东北的雪`(鼠标移动=>大风+视差) 
+> `东北的雪`(鼠标移动=>大风+视差)  太逗比了 不放出来了
 >
 > `南方的雪`(鼠标移动=>视差).
 
@@ -79,18 +106,39 @@ if (this.radius >= 3.5) {
 
 
 
-### 待更新: ~~当鼠标离开 canvas 后应该 easing 回到原来位置~~( 已经更新)
+### 待更新:
 
-### 小优化:
+1. ~~当鼠标离开 canvas 后应该 easing 回到原来位置~~( 已经更新)
 
-1. 之前秋季 是控制了全部图片的 `transform` `opacity`
-   "冬季"没有改变最下面图片的透明度 , 是通过改变上层达到类似效果.
-   同理blur 也是没有变 ,通过控制上层opacity 达到类似效果.
+   ```js
+   //class Snow
+   leave = (step) => {
+       if (per > 0 && per - step > 0) {
+         per -= step;
+         this.perReqFlag = requestAnimationFrame(() => this.leave(step));
+       } else if (per < 0 && per + step < 0) {
+         per += step;
+         this.perReqFlag = requestAnimationFrame(() => this.leave(step));
+       } else {
+         per = 0;
+         cancelAnimationFrame(this.perReqFlag);
+       }
+     };
+   
+   //index.js   mouseleave  =>  
+   	SnowAnime.leave((Math.abs(per) / (300 / 16)).toFixed(3) * 1)
+   
+   300 => 是动画时间 要和css  transition 同步  (或者你提出来 统一控制)
+   16 =>  一帧
+   Math.abs(per)  => 离开时候的偏移量
+   
+   ```
 
-2. `mousemove` 使用 `requestAnimationFrame` 来节流,我的破电脑不知道怎么回事,节流了反而卡顿了.(换个带显卡的,就不卡了). 感觉是负优化
+   
+
+   
 
 
-3. canvas  封装成class  以便大家,和我以后使用.  
 
 
-转载请标注! [https://github.com/genjiXYZ](
+转载请标注! [https://github.com/genjiXYZ]( https://github.com/genjiXYZ) 

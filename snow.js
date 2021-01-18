@@ -1,3 +1,5 @@
+// https://github.com/genjiXYZ/banner_winter
+
 class Snowflake {
   constructor() {
     this.x = 0;
