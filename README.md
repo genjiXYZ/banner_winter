@@ -56,10 +56,10 @@
  this.vx = 0;
 if (this.radius >= 3.5) {
       this.vy = this.randBetween(1.5, 2);
-      this.alpha = this.randBetween(0.5, 0.9);
+      this.alpha = this.randBetween(0.5, 1);
     } else {
       this.vy = this.randBetween(1, 1.5);
-      this.alpha = this.randBetween(0.1, 0.9);
+      this.alpha = this.randBetween(0.5, 1);
     }
 ///
  randBetween(min, max) {
